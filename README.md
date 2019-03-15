@@ -1,4 +1,5 @@
 # ai_integration
+[![PyPI version](https://badge.fury.io/py/ai-integration.svg)](https://badge.fury.io/py/ai-integration)
 AI Model Integration for Python 2.7/3
 
 
