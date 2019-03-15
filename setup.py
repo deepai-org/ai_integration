@@ -1,16 +1,14 @@
-import pathlib
+import setuptools
 from setuptools import setup
 
-# The directory containing this file
-HERE = pathlib.Path(__file__).parent
 
 # The text of the README file
-README = (HERE / "README.md").read_text()
+README = open("./README.md", 'r').read()
 
 # This call to setup() does all the work
 setup(
     name="ai_integration",
-    version="1.0.0",
+    version="1.0.1",
     description="AI Model Integration for python",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -23,9 +21,9 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    packages=["ai_integration"],
+    packages=setuptools.find_packages(),
     include_package_data=True,
-    install_requires=["Pillow==4.1.1", "Flask==1.0.2"],
+    install_requires=["Pillow", "Flask"],
     entry_points={
     },
 )
