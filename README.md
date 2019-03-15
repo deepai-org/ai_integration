@@ -22,6 +22,26 @@ Your docker entrypoint should be a simple python file (so small we call it a shi
 The library handles everything else.
 
 
+## Example Shim
+If your inference function matches the specification, this would be the only code you have to write.
+
+Assume that you put your model in a file called pretend_model.
+```python
+from ai_integration.public_interface import start_loop
+
+from pretend_model import initialize_model, infer
+
+initialize_model()
+
+start_loop(inference_function=infer, inputs_schema={
+    "image": {
+        "type": "image"
+    }
+} )
+
+```
+
+
 # Finished Model Container Requirements:
 
 1. Working directory has your entrypoint shim in it. Set with WORKDIR
