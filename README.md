@@ -2,6 +2,8 @@
 [![PyPI version](https://badge.fury.io/py/ai-integration.svg)](https://badge.fury.io/py/ai-integration)
 AI Model Integration for Python 2.7/3
 
+# Purpose
+### Wrap your AI model up as a python function - then expose it under a consistent interface so that you can run the model under a variety of integration modes and hosting platforms - all working seamlessly, automatically, with no code changes.
 
 # Built-In Integration Modes
 There are several built-in modes for testing:
