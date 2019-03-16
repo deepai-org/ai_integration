@@ -5,6 +5,8 @@ AI Model Integration for Python 2.7/3
 # Purpose
 ### Wrap your AI model up as a python function - then expose it under a consistent interface so that you can run the model under a variety of integration modes and hosting platforms - all working seamlessly, automatically, with no code changes.
 
+![Diagram showing integration modes](https://yuml.me/diagram/plain;dir:RL/class/[Your%20Model]%20->%20[AI%20Integration],%20[AI%20Integration]<-[Many%20more%20coming!],%20[AI%20Integration]<-[DeepAI%20Platform],%20[AI%20Integration]<-[Pickle],%20[AI%20Integration]<-[JSON],%20[AI%20Integration]<-[HTTP%20API],%20[AI%20Integration]<-[Command%20Line].jpg)
+
 # Built-In Integration Modes
 There are several built-in modes for testing:
 
