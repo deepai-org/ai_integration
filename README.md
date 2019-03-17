@@ -17,6 +17,9 @@ There are several built-in modes for testing:
 * Pipe single image for models that take a single input named image (test_single_image)
 * Test single image models with a built-in solid gray image (test_model_integration)
 
+# Example Models
+* [Tensorflow AdaIN Style Transfer](https://github.com/deepai-org/tf-adain-style-transfer)
+
 # Entrypoint Shims
 
 Your docker entrypoint should be a simple python file (so small we call it a shim)
