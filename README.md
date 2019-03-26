@@ -19,6 +19,7 @@ There are several built-in modes for testing:
 
 # Example Models
 * [Tensorflow AdaIN Style Transfer](https://github.com/deepai-org/tf-adain-style-transfer)
+* [Sentiment Analysis](https://github.com/deepai-org/sentiment-analysis)
 
 # Entrypoint Shims
 
