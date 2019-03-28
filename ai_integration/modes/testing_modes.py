@@ -106,7 +106,7 @@ def test_single_image(inference_function=None, inputs_schema=None):
 test_single_image.hint = 'Single image: Pipe your image in with <, as in: nvidia-docker run --rm -i -e MODE=test_single_image ...reponame... < George-W-Bush.jpeg '
 
 
-def test_inputs_dict(inference_function=None, inputs_schema=None):
+def test_inputs_dict_json(inference_function=None, inputs_schema=None):
     print('Entering test single inputs dict mode')
 
     json_data = sys.stdin.read().decode('utf-8').replace("'", '"')
@@ -127,7 +127,7 @@ def test_inputs_dict(inference_function=None, inputs_schema=None):
     check_inference_output(result)
 
 
-test_inputs_dict.hint = 'Pipe your dict in as JSON, as in: echo \'{"text":"i am some json data"}\' | nvidia-docker run --rm -i -e MODE=test_inputs_dict ...reponame...  '
+test_inputs_dict_json.hint = 'Pipe your dict in as JSON, as in: echo \'{"text":"i am some json data"}\' | nvidia-docker run --rm -i -e MODE=test_inputs_dict_json ...reponame...  '
 
 
 def test_inputs_pickled_dict(inference_function=None, inputs_schema=None):
@@ -153,6 +153,6 @@ test_inputs_pickled_dict.hint = 'Create a pickled dict of inputs, save as dict.p
 MODULE_MODES = {
     'test_model_integration': test_model_integration,
     'test_single_image': test_single_image,
-    'test_inputs_dict': test_inputs_dict,
+    'test_inputs_dict_json': test_inputs_dict_json,
     'test_inputs_pickled_dict': test_inputs_pickled_dict
 }

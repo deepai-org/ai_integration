@@ -8,7 +8,7 @@ There are several built-in modes for testing:
 
 * Command Line using argparse (command_line)
 * HTTP Web UI / multipart POST API using Flask (http)
-* Pipe inputs dict as JSON (test_inputs_dict)
+* Pipe inputs dict as JSON (test_inputs_dict_json)
 * Pipe inputs dict as pickle (test_inputs_pickled_dict)
 * Pipe single image for models that take a single input named image (test_single_image)
 * Test single image models with a built-in solid gray image (test_model_integration)
