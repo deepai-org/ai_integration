@@ -109,7 +109,7 @@ test_single_image.hint = 'Single image: Pipe your image in with <, as in: nvidia
 def test_inputs_dict_json(inference_function=None, inputs_schema=None):
     print('Entering test single inputs dict mode')
 
-    json_data = sys.stdin.read().decode('utf-8').replace("'", '"')
+    json_data = sys.stdin.read()
     print("my json data: " + str(json_data))
     print("the json data has type: " + str(type(json_data)))
     print("got %d bytes of json data" % len(json_data))
