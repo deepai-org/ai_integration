@@ -5,7 +5,7 @@ from contextlib import contextmanager
 from threading import Thread
 from multiprocessing import Queue
 
-from internal_methods import  _start_loop
+from .internal_methods import  _start_loop
 
 global background_thread
 background_thread = None
