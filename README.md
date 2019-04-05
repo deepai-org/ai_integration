@@ -3,11 +3,15 @@
 AI Model Integration for Python 2.7/3
 
 # Purpose
-### Wrap your AI model up as a python function - then expose it under a consistent interface so that you can run the model under a variety of integration modes and hosting platforms - all working seamlessly, automatically, with no code changes.
+### Expose your AI model under a standard interface so that you can run the model under a variety of usage modes and hosting platforms - all working seamlessly, automatically, with no code changes.
+### Designed to be as simple as possible to integrate.
+
+### Create a standard "ai_integration Docker Container Format" for interoperability.
+
 
 ![Diagram showing integration modes](https://yuml.me/diagram/plain;dir:RL/class/[Your%20Model]%20->%20[AI%20Integration],%20[AI%20Integration]<-[Many%20more%20coming!],%20[AI%20Integration]<-[DeepAI%20Platform],%20[AI%20Integration]<-[Pickle],%20[AI%20Integration]<-[JSON],%20[AI%20Integration]<-[HTTP%20API],%20[AI%20Integration]<-[Command%20Line].jpg)
 
-# Built-In Integration Modes
+# Built-In Usage Modes
 There are several built-in modes for testing:
 
 * Command Line using argparse (command_line)
@@ -21,62 +25,83 @@ There are several built-in modes for testing:
 * [Tensorflow AdaIN Style Transfer](https://github.com/deepai-org/tf-adain-style-transfer)
 * [Sentiment Analysis](https://github.com/deepai-org/sentiment-analysis)
 
-# Entrypoint Shims
 
-Your docker entrypoint should be a simple python file (so small we call it a shim)
-* imports start_loop from this library
-* passes your inference function to it
-* passes your inputs schema to it
+# How to call the integration library from your code
 
-The library handles everything else.
+(An older version of this library required the user to expose their model as an inference function, but this caused pain in users and is no longer needed.)
 
+Run a "while True:" loop in your code and call "get_next_input" to get inputs.
 
-## Example Shim
-If your inference function matches the specification, this would be the only code you have to write.
+Pass an inputs_schema (see full docs below) to "get_next_input".
 
-Assume that you put your model in a file called pretend_model.
+See the specification below for "Inputs Dicts"
+
+"get_next_input" needs to be called using a "with" block ad demonstrated below.
+
+Then process the data. Format the result or error as described under "Results Dicts"
+
+Then send the result (or error back) with "send_result".
+
+## Simplest Usage Example
+
+This example takes an image and returns a constant string without even looking at the input. It is a very bad AI algorithm for sure!
+
 ```python
-from ai_integration.public_interface import start_loop
+import ai_integration
 
-from pretend_model import initialize_model, infer
-
-initialize_model()
-
-start_loop(inference_function=infer, inputs_schema={
-    "image": {
-        "type": "image"
-    }
-} )
-
+while True:
+    with ai_integration.get_next_input(inputs_schema={"image": {"type": "image"}}) as inputs_dict:
+        # If an exception happens in this 'with' block, it will be sent back to the ai_integration library
+        result_data = {
+            "content-type": 'text/plain',
+            "data": "Fake output",
+            "success": True
+        }
+        ai_integration.send_result(result_data)
+        
+        
 ```
 
+# Docker Container Format Requirements:
 
-# Finished Model Container Requirements:
+####This library is intended to allow the creation of standardized docker containers. This is the standard:
 
-1. Working directory has your entrypoint shim in it. Set with WORKDIR
+1. Use the ai_integration library
 
 2. You install this library with pip (or pip3)
 
-3. CMD is used in the your model dockerfile to specify the entrypoint as your shim.
+3. CMD is used to set your python code as the entry point into the container.
 
-4. No command line arguments will be passed to your entrypoint. (Unless using the command line interface mode)
+4. No command line arguments will be passed to your python entrypoint. (Unless using the command line interface mode)
 
-5. To test your finished container's integration, run:
+5. Do not use argparse in your program as this will conflict with command line mode.
+
+To test your finished container's integration, run:
     * nvidia-docker run --rm -it -e MODE=test_model_integration YOUR_DOCKER_IMAGE_NAME
     * use docker instead of nvidia-docker if you aren't using NVIDIA...
     * You should see a bunch of happy messages. Any sad messages or exceptions indicate an error.
     * It will try inference a few times. If you don't see this happening, something is not integrated right.
 
 
-# Inference Function Specification
+# Inputs Dicts
 
-inference_function is a function that takes a single argument:
-- inputs: dict()
-- keys are input names (typically image, or style, content)
-- values are the data itself. Either byte array of JPEG data (for images) or text string.
-- any model options are also passed here and may be strings or numbers. best to accept either strings/numbers in the model.
+inputs_dict is a regular python dictionary.
 
-inference_function should return a dict():
+- Keys are input names (typically image, or style, content)
+- Values are the data itself. Either byte array of JPEG data (for images) or text string.
+- Any model options are also passed here and may be strings or numbers. Best to accept either strings/numbers in your model.
+
+
+
+# Result Dicts
+
+Content-type, a MIME type, inspired by HTTP, helps to inform the type of the "data" field
+
+success is a boolean.
+
+"error" should be the error message if success is False.
+
+
 ```python
 {
     'content-type': 'application/json', # or image/jpeg
@@ -93,10 +118,6 @@ If there's an error that you can catch:
 - set success to False
 - set data to None
 - set error to the best description of the error (perhaps the output of traceback.format_exc())
-
-inference_function should never intentionally throw exceptions.
-- If an error occurs, set success to false and set the error field.
-- If your inference function throws an Exception, the library will assume it is a bad issue and restart the script, so that the framework, CUDA, and everything else can reinitialize.
 
 # Inputs Schema
 
@@ -147,7 +168,7 @@ For example, imagine a style transfer model that needs two input images.
 }
 ```
 
-# Creating Integration Modes
+# Creating Usage Modes
 
 A mode is a function that lives in a file in the modes folder of this library.
 
@@ -172,3 +193,42 @@ Your mode will be called with the inference function and inference schema, the r
 The sky is the limit, you can integrate with pretty much anything.
 
 See existing modes for examples.
+
+
+
+# Older Integration Mode
+
+#### This documents the older way to use this library, identified by wrapping your model as a python function.
+
+### Entrypoint Shims
+
+Your docker entrypoint should be a simple python file (so small we call it a shim)
+* imports start_loop from this library
+* passes your inference function to it
+* passes your inputs schema to it
+
+The library handles everything else.
+
+
+
+### Example Shim
+If your inference function matches the specification, this would be the only code you have to write.
+
+Assume that you put your model in a file called pretend_model.
+```python
+from ai_integration.public_interface import start_loop
+
+from pretend_model import initialize_model, infer
+
+initialize_model()
+
+start_loop(inference_function=infer, inputs_schema={
+    "image": {
+        "type": "image"
+    }
+} )
+
+```
+inference_function should never intentionally throw exceptions.
+- If an error occurs, set success to false and set the error field.
+- If your inference function throws an Exception, the library will assume it is a bad issue and restart the script, so that the framework, CUDA, and everything else can reinitialize.
