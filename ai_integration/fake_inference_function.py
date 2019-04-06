@@ -1,11 +1,11 @@
-import sys
+import os
 import time
 import traceback
 from contextlib import contextmanager
 from threading import Thread
 from multiprocessing import Queue
 
-from .internal_methods import  _start_loop
+from .internal_methods import _start_loop
 
 global background_thread
 background_thread = None
@@ -31,8 +31,13 @@ def background_thread_handler(inputs_queue, outputs_queue, input_schema):
 
     print('About to start loop in background thread...')
     _start_loop(inference_function=fake_inference_function, inputs_schema=input_schema)
-    print('_start_loop in background thread exited, now quitting whole process.')
-    sys.exit(0)
+
+
+def background_thread_watcher_handler(background_thread):
+    # catch the exit of the background thread
+    background_thread.join()
+    print('background thread exited, now quitting whole process.')
+    os._exit(1)
 
 
 # Runs in main (user) thread.
@@ -54,17 +59,22 @@ def get_next_input(*args, **kwds):
     if background_thread is None:
         print('Launching background thread')
         # First time calling - need to launch background thread
-        #print('args {}, kwd {} '.format(args, kwds))
+        # print('args {}, kwd {} '.format(args, kwds))
         input_schema = kwds.get('inputs_schema')
         if input_schema is None:
             print('WARNING: no input_schema passed to context manager.')
         inputs_queue = Queue(MAX_QUEUE_LEN)
         outputs_queue = Queue(MAX_QUEUE_LEN)
         background_thread = Thread(target=background_thread_handler,
-                                    args=(inputs_queue, outputs_queue, input_schema,))
+                                   args=(inputs_queue, outputs_queue, input_schema,))
         background_thread.daemon = True
         background_thread.start()
         print('Launched background thread')
+
+        background_thread_watcher = Thread(target=background_thread_watcher_handler, args=(background_thread,))
+        background_thread_watcher.daemon = True
+        background_thread_watcher.start()
+        print('Launched background thread watcher')
 
     inputs_dict = inputs_queue.get(block=True)
     print('Main thread got an input, now handing it to the users code')
@@ -72,7 +82,6 @@ def get_next_input(*args, **kwds):
         waiting_for_user_code_response = True
         yield inputs_dict
         print('User code returned')
-
 
         # The user's code must now call send_result before this returns.
 
