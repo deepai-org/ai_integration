@@ -36,7 +36,7 @@ Pass an inputs_schema (see full docs below) to "get_next_input".
 
 See the specification below for "Inputs Dicts"
 
-"get_next_input" needs to be called using a "with" block ad demonstrated below.
+"get_next_input" needs to be called using a "with" block as demonstrated below.
 
 Then process the data. Format the result or error as described under "Results Dicts"
 
