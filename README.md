@@ -70,7 +70,7 @@ while True:
 
 2. You install this library with pip (or pip3)
 
-3. CMD is used to set your python code as the entry point into the container.
+3. ENTRYPOINT is used to set your python code as the entry point into the container.
 
 4. No command line arguments will be passed to your python entrypoint. (Unless using the command line interface mode)
 
