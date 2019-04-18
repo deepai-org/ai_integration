@@ -26,6 +26,16 @@ There are several built-in modes for testing:
 * [Sentiment Analysis](https://github.com/deepai-org/sentiment-analysis)
 * [Deep Dream](https://github.com/deepai-org/deepdream)
 
+# Contribution & Sponsors
+
+`ai_integration` is a community project developed under the free Apache 2.0 license. We welcome any new modes, integrations, bugfixes, and your ideas.
+
+We have several company sponsors:
+
+* [DeepAI](https://deepai.org/)
+
+If you're interested in becoming a sponsor, send an email to ai-integration@deepai.org 
+
 # How to call the integration library from your code
 
 (An older version of this library required the user to expose their model as an inference function, but this caused pain in users and is no longer needed.)
