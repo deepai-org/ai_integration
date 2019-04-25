@@ -34,6 +34,7 @@ We have several company sponsors:
 
 * [DeepAI](https://deepai.org/)
 * [ZeroSix.ai](https://www.zerosix.ai/)
+* [panini.ai](https://www.panini.ai/)
 
 If you're interested in becoming a sponsor, send an email to ai-integration@deepai.org 
 
