@@ -25,6 +25,7 @@ There are several built-in modes for testing:
 * [Tensorflow AdaIN Style Transfer](https://github.com/deepai-org/tf-adain-style-transfer)
 * [Sentiment Analysis](https://github.com/deepai-org/sentiment-analysis)
 * [Deep Dream](https://github.com/deepai-org/deepdream)
+* [Open NSFW](https://github.com/deepai-org/open_nsfw)
 
 # Contribution & Sponsors
 
