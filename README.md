@@ -26,6 +26,7 @@ There are several built-in modes for testing:
 * [Sentiment Analysis](https://github.com/deepai-org/sentiment-analysis)
 * [Deep Dream](https://github.com/deepai-org/deepdream)
 * [Open NSFW](https://github.com/deepai-org/open_nsfw)
+* [Super Resolution](https://github.com/deepai-org/tf-super-resolution)
 
 # Contribution & Sponsors
 
