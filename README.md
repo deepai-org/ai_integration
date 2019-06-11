@@ -27,6 +27,7 @@ There are several built-in modes for testing:
 * [Deep Dream](https://github.com/deepai-org/deepdream)
 * [Open NSFW](https://github.com/deepai-org/open_nsfw)
 * [Super Resolution](https://github.com/deepai-org/tf-super-resolution)
+* [GPT-2 Text Generator](https://github.com/deepai-org/GPT2)
 
 # Contribution & Sponsors
 
