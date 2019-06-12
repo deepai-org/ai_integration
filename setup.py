@@ -8,7 +8,7 @@ README = open("./README.md", 'r').read()
 # This call to setup() does all the work
 setup(
     name="ai_integration",
-    version="1.0.6",
+    version="1.0.7",
     description="AI Model Integration for python",
     long_description=README,
     long_description_content_type="text/markdown",
