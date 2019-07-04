@@ -31,7 +31,7 @@ AI Model Integration for Python 2.7/3
         * [Text](#text)
 - [Creating Usage Modes](#creating-usage-modes)
 - [Older Integration Mode](#older-integration-mode)
-      - [This documents the older way to use this library, identified by wrapping your model as a python function.](#this-documents-the-older-way-to-use-this-library--identified-by-wrapping-your-model-as-a-python-function)
+      - This documents the older way to use this library, identified by wrapping your model as a python function.
 
 # Built-In Usage Modes
 There are several built-in modes for testing:
