@@ -11,6 +11,28 @@ AI Model Integration for Python 2.7/3
 
 ![Diagram showing integration modes](https://yuml.me/diagram/plain;dir:RL/class/[Your%20Model]%20->%20[AI%20Integration],%20[AI%20Integration]<-[Many%20more%20coming!],%20[AI%20Integration]<-[DeepAI%20Platform],%20[AI%20Integration]<-[Pickle],%20[AI%20Integration]<-[JSON],%20[AI%20Integration]<-[HTTP%20API],%20[AI%20Integration]<-[Command%20Line].jpg)
 
+## Table of Contents
+
+- [Purpose](#purpose)
+- [Built-In Usage Modes](#built-in-usage-modes)
+- [Example Models](#example-models)
+- [Contribution & Sponsors](#contribution--sponsors)
+- [How to call the integration library from your code](#how-to-call-the-integration-library-from-your-code)
+  * [Simplest Usage Example](#simplest-usage-example)
+- [Docker Container Format Requirements](#docker-container-format-requirements)
+- [Inputs Dicts](#inputs-dicts)
+- [Result Dicts](#result-dicts)
+- [Error Handling](#error-handling)
+- [Inputs Schema](#inputs-schema)
+    + [Schema Data Types](#schema-data-types)
+    + [Schema Examples](#schema-examples)
+        * [Single Image](#single-image)
+        * [Multi-Image](#multi-image)
+        * [Text](#text)
+- [Creating Usage Modes](#creating-usage-modes)
+- [Older Integration Mode](#older-integration-mode)
+      - [This documents the older way to use this library, identified by wrapping your model as a python function.](#this-documents-the-older-way-to-use-this-library--identified-by-wrapping-your-model-as-a-python-function)
+
 # Built-In Usage Modes
 There are several built-in modes for testing:
 
