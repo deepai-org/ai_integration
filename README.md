@@ -28,6 +28,7 @@ There are several built-in modes for testing:
 * [Open NSFW](https://github.com/deepai-org/open_nsfw)
 * [Super Resolution](https://github.com/deepai-org/tf-super-resolution)
 * [GPT-2 Text Generator](https://github.com/deepai-org/GPT2)
+* [StyleGAN Face Generator](https://github.com/deepai-org/face-generator)
 
 # Contribution & Sponsors
 
