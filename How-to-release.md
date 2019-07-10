@@ -2,6 +2,8 @@
 
 Increase the version number in setup.py .
 
+Username for twine is "deepai"
+
 Then:
 
 ```bash

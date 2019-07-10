@@ -20,7 +20,7 @@ global waiting_for_user_code_response
 waiting_for_user_code_response = False
 
 
-def background_thread_handler(inputs_queue, outputs_queue, input_schema):
+def background_thread_handler(inputs_queue, outputs_queue, input_schema, visualizer_config):
     print('Hello from background thread')
 
     # Runs in background (library) thread.
@@ -30,7 +30,7 @@ def background_thread_handler(inputs_queue, outputs_queue, input_schema):
         return outputs_queue.get(block=True)
 
     print('About to start loop in background thread...')
-    _start_loop(inference_function=fake_inference_function, inputs_schema=input_schema)
+    _start_loop(inference_function=fake_inference_function, inputs_schema=input_schema, visualizer_config=visualizer_config)
 
 
 def background_thread_watcher_handler(background_thread):
@@ -61,12 +61,13 @@ def get_next_input(*args, **kwds):
         # First time calling - need to launch background thread
         # print('args {}, kwd {} '.format(args, kwds))
         input_schema = kwds.get('inputs_schema')
+        visualizer_config = kwds.get('visualizer_config')
         if input_schema is None:
             print('WARNING: no input_schema passed to context manager.')
         inputs_queue = Queue(MAX_QUEUE_LEN)
         outputs_queue = Queue(MAX_QUEUE_LEN)
         background_thread = Thread(target=background_thread_handler,
-                                   args=(inputs_queue, outputs_queue, input_schema,))
+                                   args=(inputs_queue, outputs_queue, input_schema, visualizer_config,))
         background_thread.daemon = True
         background_thread.start()
         print('Launched background thread')

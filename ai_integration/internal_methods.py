@@ -11,8 +11,7 @@ from ai_integration.modes import *
 DEBUG=False
 
 
-# This is the only function that should be imported by the user's shim.
-def _start_loop(inference_function=None, inputs_schema=None):
+def _start_loop(inference_function=None, inputs_schema=None, visualizer_config=None):
     loaded_module_names = ai_integration.modes.__all__
 
     if DEBUG:
@@ -56,6 +55,6 @@ def _start_loop(inference_function=None, inputs_schema=None):
     if inputs_schema is None:
         print('Warning: No inputs schema was provided to start_loop. Using empty inputs schema. Some integration modes may not work, if they use the inputs schema!')
 
-    mode_function(inference_function=inference_function, inputs_schema=inputs_schema)
+    mode_function(inference_function=inference_function, inputs_schema=inputs_schema, visualizer_config=visualizer_config)
     print('Mode has exited cleanly: '+chosen_mode)
     exit(0)

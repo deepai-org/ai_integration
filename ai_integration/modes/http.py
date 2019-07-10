@@ -1,14 +1,19 @@
+import base64
+import json
 import os
 import traceback
 
 from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024 # 100mb max size
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100mb max size
 
+SCRIPT_PATH = os.path.dirname(__file__)
 
 global_inference_function = None
 global_inputs_schema = None
+global_visualizer_config = None
+
 
 @app.route('/', methods=['GET', 'POST'])
 def hello():
@@ -16,30 +21,73 @@ def hello():
     global global_inputs_schema
     if request.method == 'POST':
         inputs_dict = {}
+        inputs_returned = []
         for key, value in global_inputs_schema.items():
             if key in request.files:
                 inputs_dict[key] = request.files[key].read()
             elif key in request.form:
                 inputs_dict[key] = request.form[key]
             else:
-                return 'Input not provided: '+key
+                return 'Input not provided: ' + key
+
+            if value['type'] == 'image':
+                inputs_returned.append({
+                    'is_img': True,
+                    'url': 'data:' + 'image/jpeg' + ';base64,' + base64.b64encode(inputs_dict[key]).decode("utf-8")  # mime type may not be right here
+                })
+            else:
+                inputs_returned.append({
+                    'is_img': False,
+                    'url': 'data:' + 'text/plain' + ';base64,' + base64.b64encode(inputs_dict[key]).decode("utf-8")
+                })
 
         print('Attempting inference...')
         try:
             result = global_inference_function(inputs_dict)
         except Exception:
-            return 'fail, inference produced an exception:'+traceback.print_exc()
+            return 'fail, inference produced an exception:' + traceback.print_exc()
+
 
         if result['success'] == True:
-            return result['data'], 200, {'Content-Type': result.get('content-type')}
+
+
+
+            res_content_type = result.get('content-type')
+
+            output = None
+            output_url = None
+
+            if res_content_type and res_content_type.startswith('image'):
+                output_url = 'data:'+res_content_type+';base64,' + base64.b64encode(result['data'])
+            elif res_content_type and 'json' in res_content_type:
+                output = json.loads(result['data'])
+            else:
+                output = result['data']
+
+            return json.dumps({
+                'id': "0000-0000-0000-0000-000012345",
+                'output_url': output_url,
+                'scale_applied': 1,
+                'inputs': inputs_returned,
+                'output': output,
+                "visualizer_data": global_visualizer_config
+            }), 200, {'Content-Type': 'application/json'}
+
         else:
-            return 'Model indicated that it failed: '+ repr(result)
+            return json.dumps({
+                'err': repr(result)
+            }), 200, {'Content-Type': 'application/json'}
+
+    js_script = open(os.path.join(SCRIPT_PATH, 'http_helpers/deepai.js'), 'rb').read().decode('utf-8')
 
     return render_template_string('''
     <!doctype html>
     <title>Model Test</title>
+    
+    <script>{{ js_script|safe }}</script>
+    
     <h1>Test Model</h1>
-    <form method=post enctype=multipart/form-data target='result_iframe'>
+    <form method=post enctype=multipart/form-data id='inputs-form'>
        {% for key, value in input_schema.items() %}
        
           Input {{key}}: 
@@ -53,19 +101,43 @@ def hello():
           <br/>
        {% endfor %}
       
-      <input type=submit value=Upload>
     </form>
-    <iframe name="result_iframe" src="" style="width:100%; height:600px;"></iframe>
+    
+    <button onclick='uploadForm()'> Upload </button>
+    <div id="result_div" src="" style="border:1px solid gray; width: 50%; height: 600px;"></div>
+    
+    <script>
+    
+    async function uploadForm(){
+        var form = new FormData(document.getElementById('inputs-form'));
 
-    ''', input_schema=global_inputs_schema
-    )
+        var postResults = await fetch('/', {
+          method: 'POST',
+          body: form
+        });
+        
+        postResults = await postResults.json();
+        
+        deepai.renderAnnotatedResultIntoElement(postResults, document.getElementById('result_div'));
+    }
+    
+    
+    </script>
 
-def http(inference_function=None, inputs_schema=None):
+    ''',
+                                  input_schema=global_inputs_schema,
+                                  js_script=js_script
+                                  )
+
+
+def http(inference_function=None, inputs_schema=None, visualizer_config=None):
     global global_inference_function
     global global_inputs_schema
+    global global_visualizer_config
     global_inference_function = inference_function
     global_inputs_schema = inputs_schema
-    os.environ['FLASK_ENV']='development'
+    global_visualizer_config = visualizer_config
+    os.environ['FLASK_ENV'] = 'development'
     app.run(debug=True, host='0.0.0.0', use_reloader=False)
 
 

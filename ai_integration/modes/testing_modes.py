@@ -49,7 +49,7 @@ def check_inference_output(result):
             print('Unknown response content type:' + result['content-type'])
 
 
-def test_inference_function(inference_function=None, inputs_schema=None):
+def test_inference_function(inference_function=None, inputs_schema=None, visualizer_config=None):
     from PIL import Image
 
     solid_color_image = Image.new("RGB", (600, 400), (200, 200, 200))
@@ -84,7 +84,7 @@ def test_model_integration(inference_function=None, inputs_schema=None):
 test_model_integration.hint = 'Test running the function on a single gray image (docker run flag: -e MODE=test_model_integration )'
 
 
-def test_single_image(inference_function=None, inputs_schema=None):
+def test_single_image(inference_function=None, inputs_schema=None, visualizer_config=None):
     print('Entering single input test mode')
 
     image_data = sys.stdin.read()
@@ -106,7 +106,7 @@ def test_single_image(inference_function=None, inputs_schema=None):
 test_single_image.hint = 'Single image: Pipe your image in with <, as in: nvidia-docker run --rm -i -e MODE=test_single_image ...reponame... < George-W-Bush.jpeg '
 
 
-def test_inputs_dict_json(inference_function=None, inputs_schema=None):
+def test_inputs_dict_json(inference_function=None, inputs_schema=None, visualizer_config=None):
     print('Entering test single inputs dict mode')
 
     json_data = sys.stdin.read()
@@ -130,7 +130,7 @@ def test_inputs_dict_json(inference_function=None, inputs_schema=None):
 test_inputs_dict_json.hint = 'Pipe your dict in as JSON, as in: echo \'{"text":"i am some json data"}\' | nvidia-docker run --rm -i -e MODE=test_inputs_dict_json ...reponame...  '
 
 
-def test_inputs_pickled_dict(inference_function=None, inputs_schema=None):
+def test_inputs_pickled_dict(inference_function=None, inputs_schema=None, visualizer_config=None):
     print('Entering test pickled dict mode')
 
     pkl_data = sys.stdin.buffer.read()
