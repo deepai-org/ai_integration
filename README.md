@@ -11,6 +11,28 @@ AI Model Integration for Python 2.7/3
 
 ![Diagram showing integration modes](https://yuml.me/diagram/plain;dir:RL/class/[Your%20Model]%20->%20[AI%20Integration],%20[AI%20Integration]<-[Many%20more%20coming!],%20[AI%20Integration]<-[DeepAI%20Platform],%20[AI%20Integration]<-[Pickle],%20[AI%20Integration]<-[JSON],%20[AI%20Integration]<-[HTTP%20API],%20[AI%20Integration]<-[Command%20Line].jpg)
 
+## Table of Contents
+
+- [Purpose](#purpose)
+- [Built-In Usage Modes](#built-in-usage-modes)
+- [Example Models](#example-models)
+- [Contribution & Sponsors](#contribution--sponsors)
+- [How to call the integration library from your code](#how-to-call-the-integration-library-from-your-code)
+  * [Simplest Usage Example](#simplest-usage-example)
+- [Docker Container Format Requirements](#docker-container-format-requirements)
+- [Inputs Dicts](#inputs-dicts)
+- [Result Dicts](#result-dicts)
+- [Error Handling](#error-handling)
+- [Inputs Schema](#inputs-schema)
+    + [Schema Data Types](#schema-data-types)
+    + [Schema Examples](#schema-examples)
+        * [Single Image](#single-image)
+        * [Multi-Image](#multi-image)
+        * [Text](#text)
+- [Creating Usage Modes](#creating-usage-modes)
+- [Older Integration Mode](#older-integration-mode)
+      - This documents the older way to use this library, identified by wrapping your model as a python function.
+
 # Built-In Usage Modes
 There are several built-in modes for testing:
 
@@ -24,7 +46,23 @@ There are several built-in modes for testing:
 # Example Models
 * [Tensorflow AdaIN Style Transfer](https://github.com/deepai-org/tf-adain-style-transfer)
 * [Sentiment Analysis](https://github.com/deepai-org/sentiment-analysis)
+* [Deep Dream](https://github.com/deepai-org/deepdream)
+* [Open NSFW](https://github.com/deepai-org/open_nsfw)
+* [Super Resolution](https://github.com/deepai-org/tf-super-resolution)
+* [GPT-2 Text Generator](https://github.com/deepai-org/GPT2)
+* [StyleGAN Face Generator](https://github.com/deepai-org/face-generator)
 
+# Contribution & Sponsors
+
+`ai_integration` is a community project developed under the free Apache 2.0 license. We welcome any new modes, integrations, bugfixes, and your ideas.
+
+We have several company sponsors:
+
+* [DeepAI](https://deepai.org/)
+* [ZeroSix.ai](https://www.zerosix.ai/)
+* [panini.ai](https://www.panini.ai/)
+
+If you're interested in becoming a sponsor, send an email to ai-integration@deepai.org 
 
 # How to call the integration library from your code
 
@@ -36,7 +74,7 @@ Pass an inputs_schema (see full docs below) to "get_next_input".
 
 See the specification below for "Inputs Dicts"
 
-"get_next_input" needs to be called using a "with" block ad demonstrated below.
+"get_next_input" needs to be called using a "with" block as demonstrated below.
 
 Then process the data. Format the result or error as described under "Results Dicts"
 
@@ -64,13 +102,13 @@ while True:
 
 # Docker Container Format Requirements:
 
-####This library is intended to allow the creation of standardized docker containers. This is the standard:
+#### This library is intended to allow the creation of standardized docker containers. This is the standard:
 
 1. Use the ai_integration library
 
 2. You install this library with pip (or pip3)
 
-3. CMD is used to set your python code as the entry point into the container.
+3. ENTRYPOINT is used to set your python code as the entry point into the container.
 
 4. No command line arguments will be passed to your python entrypoint. (Unless using the command line interface mode)
 
