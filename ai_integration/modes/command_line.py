@@ -21,7 +21,7 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
-def command_line(inference_function=None, inputs_schema=None):
+def command_line(inference_function=None, inputs_schema=None, visualizer_config=None):
     print('Entering command line mode')
 
     parser = argparse.ArgumentParser()

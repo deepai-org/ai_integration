@@ -3,12 +3,32 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import inspect
 import os
 
 import ai_integration.modes
 from ai_integration.modes import *
 
-DEBUG=False
+DEBUG = False
+
+
+def get_args_supported_by_function(x):
+    if hasattr(inspect, 'getfullargspec'):
+        # python3
+        return inspect.getfullargspec(x).args
+    return inspect.getargspec(x).args
+
+
+def getValidKwargs(func, args):
+    good_args = {}
+    supported_args = get_args_supported_by_function(func)
+    for arg in args:
+        if arg in supported_args:
+            good_args[arg] = args[arg]
+        else:
+            print('Warning, not passing this argument to the mode function:' + arg)
+
+    return good_args
 
 
 def _start_loop(inference_function=None, inputs_schema=None, visualizer_config=None):
@@ -44,17 +64,26 @@ def _start_loop(inference_function=None, inputs_schema=None, visualizer_config=N
                 print(' * MODE={}: {}'.format(mode_name, hint))
             else:
                 print(' * MODE={}: (No hint attached to this function)'.format(mode_name))
-        chosen_mode='command_line'
+        chosen_mode = 'command_line'
 
     if chosen_mode not in all_modes_by_name:
-        print('MODE not found: '+str(chosen_mode))
+        print('MODE not found: ' + str(chosen_mode))
         exit(1)
 
     mode_function = all_modes_by_name[chosen_mode]
 
     if inputs_schema is None:
-        print('Warning: No inputs schema was provided to start_loop. Using empty inputs schema. Some integration modes may not work, if they use the inputs schema!')
+        print(
+            'Warning: No inputs schema was provided to start_loop. Using empty inputs schema. Some integration modes may not work, if they use the inputs schema!')
 
-    mode_function(inference_function=inference_function, inputs_schema=inputs_schema, visualizer_config=visualizer_config)
-    print('Mode has exited cleanly: '+chosen_mode)
+    all_keyword_args = {
+        'inference_function': inference_function,
+        'inputs_schema': inputs_schema,
+        'visualizer_config': visualizer_config
+    }
+
+    # This passes only the supported named arguments to the mode function provided
+    mode_function(**getValidKwargs(mode_function, all_keyword_args))
+
+    print('Mode has exited cleanly: ' + chosen_mode)
     exit(0)
