@@ -33,12 +33,16 @@ def hello():
             if value['type'] == 'image':
                 inputs_returned.append({
                     'is_img': True,
-                    'url': 'data:' + 'image/jpeg' + ';base64,' + base64.b64encode(inputs_dict[key]).decode("utf-8")  # mime type may not be right here
+                    'url': 'data:' + 'image/jpeg' + ';base64,' + base64.b64encode(inputs_dict[key]).decode("utf-8")
+                    # mime type may not be right here
                 })
             else:
+                input_bytestr = inputs_dict[key]
+                if hasattr(input_bytestr, 'encode'):
+                    input_bytestr = input_bytestr.encode('utf-8')
                 inputs_returned.append({
                     'is_img': False,
-                    'url': 'data:' + 'text/plain' + ';base64,' + base64.b64encode(inputs_dict[key]).decode("utf-8")
+                    'url': 'data:' + 'text/plain' + ';base64,' + base64.b64encode(input_bytestr).decode("utf-8")
                 })
 
         print('Attempting inference...')
@@ -47,10 +51,7 @@ def hello():
         except Exception:
             return 'fail, inference produced an exception:' + traceback.print_exc()
 
-
         if result['success'] == True:
-
-
 
             res_content_type = result.get('content-type')
 
@@ -58,7 +59,7 @@ def hello():
             output_url = None
 
             if res_content_type and res_content_type.startswith('image'):
-                output_url = 'data:'+res_content_type+';base64,' + base64.b64encode(result['data'])
+                output_url = 'data:' + res_content_type + ';base64,' + base64.b64encode(result['data'])
             elif res_content_type and 'json' in res_content_type:
                 output = json.loads(result['data'])
             else:
