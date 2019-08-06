@@ -59,7 +59,10 @@ def hello():
             output_url = None
 
             if res_content_type and res_content_type.startswith('image'):
-                output_url = 'data:' + res_content_type + ';base64,' + base64.b64encode(result['data'])
+                encoded = base64.b64encode(result['data'])
+                if hasattr(encoded, 'encode'):
+                    encoded = encoded.encode('utf-8')
+                output_url = 'data:' + res_content_type + ';base64,' + encoded
             elif res_content_type and 'json' in res_content_type:
                 output = json.loads(result['data'])
             else:
