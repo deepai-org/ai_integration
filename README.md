@@ -51,6 +51,7 @@ There are several built-in modes for testing:
 * [Super Resolution](https://github.com/deepai-org/tf-super-resolution)
 * [GPT-2 Text Generator](https://github.com/deepai-org/GPT2)
 * [StyleGAN Face Generator](https://github.com/deepai-org/face-generator)
+* [DeOldify Black-and-white Image Colorizer](https://github.com/deepai-org/DeOldify)
 
 # Contribution & Sponsors
 
