@@ -9,14 +9,13 @@ AI Model Integration for Python 2.7/3
 ### Create a standard "ai_integration Docker Container Format" for interoperability.
 
 
-![Diagram showing integration modes](https://yuml.me/diagram/plain;dir:RL/class/[Your%20Model]%20->%20[AI%20Integration],%20[AI%20Integration]<-[Many%20more%20coming!],%20[AI%20Integration]<-[DeepAI%20Platform],%20[AI%20Integration]<-[Pickle],%20[AI%20Integration]<-[JSON],%20[AI%20Integration]<-[HTTP%20API],%20[AI%20Integration]<-[Command%20Line].jpg)
+![Diagram showing integration modes](https://yuml.me/diagram/plain;dir:RL/class/[Your%20Model]%20->%20[AI%20Integration],%20[AI%20Integration]<-[Many%20more%20coming!],%20[AI%20Integration]<-[Pickle],%20[AI%20Integration]<-[JSON],%20[AI%20Integration]<-[HTTP%20API],%20[AI%20Integration]<-[Command%20Line].jpg)
 
 ## Table of Contents
 
 - [Purpose](#purpose)
 - [Built-In Usage Modes](#built-in-usage-modes)
 - [Example Models](#example-models)
-- [Contribution & Sponsors](#contribution--sponsors)
 - [How to call the integration library from your code](#how-to-call-the-integration-library-from-your-code)
   * [Simplest Usage Example](#simplest-usage-example)
 - [Docker Container Format Requirements](#docker-container-format-requirements)
@@ -30,8 +29,6 @@ AI Model Integration for Python 2.7/3
         * [Multi-Image](#multi-image)
         * [Text](#text)
 - [Creating Usage Modes](#creating-usage-modes)
-- [Older Integration Mode](#older-integration-mode)
-      - This documents the older way to use this library, identified by wrapping your model as a python function.
 
 # Built-In Usage Modes
 There are several built-in modes for testing:
@@ -53,17 +50,9 @@ There are several built-in modes for testing:
 * [StyleGAN Face Generator](https://github.com/deepai-org/face-generator)
 * [DeOldify Black-and-white Image Colorizer](https://github.com/deepai-org/DeOldify)
 
-# Contribution & Sponsors
+# Contribution
 
 `ai_integration` is a community project developed under the free Apache 2.0 license. We welcome any new modes, integrations, bugfixes, and your ideas.
-
-We have several company sponsors:
-
-* [DeepAI](https://deepai.org/)
-* [ZeroSix.ai](https://www.zerosix.ai/)
-* [panini.ai](https://www.panini.ai/)
-
-If you're interested in becoming a sponsor, send an email to ai-integration@deepai.org 
 
 # How to call the integration library from your code
 
@@ -232,42 +221,3 @@ Your mode will be called with the inference function and inference schema, the r
 The sky is the limit, you can integrate with pretty much anything.
 
 See existing modes for examples.
-
-
-
-# Older Integration Mode
-
-#### This documents the older way to use this library, identified by wrapping your model as a python function.
-
-### Entrypoint Shims
-
-Your docker entrypoint should be a simple python file (so small we call it a shim)
-* imports start_loop from this library
-* passes your inference function to it
-* passes your inputs schema to it
-
-The library handles everything else.
-
-
-
-### Example Shim
-If your inference function matches the specification, this would be the only code you have to write.
-
-Assume that you put your model in a file called pretend_model.
-```python
-from ai_integration.public_interface import start_loop
-
-from pretend_model import initialize_model, infer
-
-initialize_model()
-
-start_loop(inference_function=infer, inputs_schema={
-    "image": {
-        "type": "image"
-    }
-} )
-
-```
-inference_function should never intentionally throw exceptions.
-- If an error occurs, set success to false and set the error field.
-- If your inference function throws an Exception, the library will assume it is a bad issue and restart the script, so that the framework, CUDA, and everything else can reinitialize.
