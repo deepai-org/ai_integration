@@ -5076,13 +5076,13 @@ __webpack_require__(135);
 
 var _global = _interopRequireDefault(__webpack_require__(307));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-if (_global.default._babelPolyfill && typeof console !== "undefined" && console.warn) {
+if (_global["default"]._babelPolyfill && typeof console !== "undefined" && console.warn) {
   console.warn("@babel/polyfill is loaded more than once on this page. This is probably not desirable/intended " + "and may have consequences if different versions of the polyfills are applied sequentially. " + "If you do need to load the polyfill more than once, use @babel/polyfill/noConflict " + "instead to bypass the warning.");
 }
 
-_global.default._babelPolyfill = true;
+_global["default"]._babelPolyfill = true;
 
 /***/ }),
 /* 135 */
@@ -12126,7 +12126,8 @@ function toByteArray (b64) {
     ? validLen - 4
     : validLen
 
-  for (var i = 0; i < len; i += 4) {
+  var i
+  for (i = 0; i < len; i += 4) {
     tmp =
       (revLookup[b64.charCodeAt(i)] << 18) |
       (revLookup[b64.charCodeAt(i + 1)] << 12) |
@@ -13139,7 +13140,10 @@ var WAD_COLORS = ["rgb(173, 35, 35)", // Red
 "rgb(255, 146, 51)", // Orange
 "rgb(199, 183, 0)", // Yellow
 "rgb(233, 222, 187)", // Tan
-"rgb(255, 205, 243)"];
+"rgb(255, 205, 243)" // Pink
+// "rgb(255, 255, 255)", // White
+//"rgb(0, 0, 0)",       // Black
+];
 var isAbsolute = new RegExp('^([a-z]+://|//)', 'i');
 var isDataOrBlob = new RegExp('^(data|blob):', 'i');
 
@@ -13745,7 +13749,7 @@ function process_annotations(input_struct, visualizer_data, scale_applied) {
   detections.sort(function (a, b) {
     return b.confidence - a.confidence;
   });
-  var count = Math.min(15, detections.length);
+  var count = detections.length;
   var processed_annotations = [];
 
   for (var i = 0; i < count; i++) {
@@ -13792,10 +13796,15 @@ function process_annotations(input_struct, visualizer_data, scale_applied) {
         var p2 = detection[visualizer_data.label_key][pair[1]];
 
         if (p1 && p2) {
-          p1[0] *= scale_applied;
-          p1[1] *= scale_applied;
-          p2[0] *= scale_applied;
-          p2[1] *= scale_applied;
+          p1 = JSON.parse(JSON.stringify(p1)); // cheap deep clone
+
+          p2 = JSON.parse(JSON.stringify(p2)); // cheap deep clone
+          // Do not rescale here - let the mask rescale handle this
+          //                    p1[0] *= scale_applied;
+          //                    p1[1] *= scale_applied;
+          //                    p2[0] *= scale_applied;
+          //                    p2[1] *= scale_applied;
+
           var polygon_part = [p1, p2];
           mask_vertices.push(polygon_part);
         }
@@ -13823,7 +13832,8 @@ function process_annotations(input_struct, visualizer_data, scale_applied) {
       detection.bounding_box[1] *= scale_applied;
       detection.bounding_box[2] *= scale_applied;
       detection.bounding_box[3] *= scale_applied;
-    }
+    } // Note: this also handles pose results!
+
 
     if (detection.mask_vertices) {
       var _iteratorNormalCompletion8 = true;
