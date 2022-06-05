@@ -7,7 +7,12 @@ __pycache__/
 *.so
 
 # Distribution / packaging
-.Python
+._Python
+cache/
+usr/
+.usr/
+dev/
+storage/
 build/
 develop-eggs/
 dist/
@@ -15,6 +20,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+_lib/
 lib64/
 parts/
 sdist/
@@ -35,7 +41,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit build / coverage 
 htmlcov/
 .tox/
 .coverage
@@ -89,6 +95,11 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.assets/
+/.assets/images
+var/tmp/
+tmp/
+
 
 # Spyder project settings
 .spyderproject
@@ -98,9 +109,9 @@ venv.bak/
 .ropeproject
 
 # mkdocs documentation
-/site
+/_site
 
 # mypy
-.mypy_cache/
-.idea/*
-tmp/*
+._mypy_cache/
+._idea/*
+&tmp/*
