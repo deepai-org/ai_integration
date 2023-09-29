@@ -41,13 +41,7 @@ There are several built-in modes for testing:
 * Test single image models with a built-in solid gray image (test_model_integration)
 
 # Example Models
-* [Tensorflow AdaIN Style Transfer](https://github.com/deepai-org/tf-adain-style-transfer)
-* [Sentiment Analysis](https://github.com/deepai-org/sentiment-analysis)
-* [Deep Dream](https://github.com/deepai-org/deepdream)
 * [Open NSFW](https://github.com/deepai-org/open_nsfw)
-* [Super Resolution](https://github.com/deepai-org/tf-super-resolution)
-* [GPT-2 Text Generator](https://github.com/deepai-org/GPT2)
-* [StyleGAN Face Generator](https://github.com/deepai-org/face-generator)
 * [DeOldify Black-and-white Image Colorizer](https://github.com/deepai-org/DeOldify)
 
 # Contribution
